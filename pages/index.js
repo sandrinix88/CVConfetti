@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
 
 export default function Home() {
+  const [typedText, setTypedText] = useState("");
   const [input, setInput] = useState("");
   const [tone, setTone] = useState("professional");
   const [output, setOutput] = useState("");
-  const [typedText, setTypedText] = useState("");
 
   useEffect(() => {
     const text = "CV blurb for you";
@@ -17,11 +17,12 @@ export default function Home() {
     return () => clearInterval(interval);
   }, []);
 
-  const handleGenerate = async (type) => {
+  const generateText = async (type) => {
     if (!input) {
       setOutput("✨ Type something first!");
       return;
     }
+
     setOutput("⏳ Generating magic...");
 
     try {
@@ -33,74 +34,64 @@ export default function Home() {
       const data = await res.json();
       setOutput(data.result || "Something went wrong 😅");
     } catch (err) {
+      console.error(err);
       setOutput("💥 Error — check console.");
     }
   };
 
   return (
-    <main className="min-h-screen bg-[#F7F4EF] text-[#2E2E2E] flex flex-col items-center justify-center px-6 py-12">
-      <section className="text-center max-w-2xl">
-        <h1 className="text-4xl md:text-5xl font-serif mb-4">
-          Say it better. Get hired faster.
-        </h1>
-        <p className="text-lg mb-8 text-gray-700">
-          We write the{" "}
-          <span className="text-[#4B8F6C] font-semibold">{typedText}</span>
-          <span className="animate-pulse">|</span>
-        </p>
+    <main>
+      <style>{`
+        body { font-family: 'Inter', sans-serif; margin: 0; padding: 0; background: #F7F4EF; color: #2E2E2E; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+        main { max-width: 600px; width: 100%; padding: 2rem; text-align: center; }
+        h1 { font-family: 'Playfair Display', serif; font-size: 2.5rem; margin-bottom: 1rem; }
+        p { font-size: 1.2rem; margin-bottom: 2rem; }
+        .floating-box { background: white; padding: 2rem; border-radius: 1.5rem; box-shadow: 0 8px 20px rgba(0,0,0,0.1); }
+        .input-container, .tone-container { margin-bottom: 1rem; width: 100%; }
+        input, select { width: 100%; padding: 0.75rem; border-radius: 1rem; border: 1px solid #ccc; font-size: 1rem; }
+        button { padding: 0.75rem 1.5rem; border: none; border-radius: 1rem; font-size: 1rem; cursor: pointer; margin: 0.5rem; }
+        .resume-btn { background: #4B8F6C; color: white; }
+        .cover-btn { background: #D1BFA3; color: #2E2E2E; }
+        .output { background: #FDFCF9; border: 1px solid #E5E3DE; padding: 1rem; border-radius: 1rem; margin-top: 1rem; font-style: italic; }
+        .typed { color: #4B8F6C; font-weight: 600; }
+        footer { margin-top: 2rem; font-size: 0.9rem; color: #666; }
+      `}</style>
 
-        <div className="bg-white rounded-2xl shadow-md p-6 mb-6 w-full">
+      <h1>Say it better. Get hired faster.</h1>
+      <p>We write the <span className="typed">{typedText}</span><span>|</span></p>
+
+      <div className="floating-box">
+        <div className="input-container">
           <input
             type="text"
+            placeholder="Type your job title or skills..."
             value={input}
             onChange={(e) => setInput(e.target.value)}
-            placeholder="Type your job title or skills..."
-            className="w-full border border-gray-300 rounded-xl px-4 py-3 mb-4 focus:outline-none focus:ring-2 focus:ring-[#4B8F6C]"
           />
-
-          <div className="w-full mb-4">
-            <label className="block text-left text-sm text-gray-700 mb-1">
-              Tone:
-            </label>
-            <select
-              value={tone}
-              onChange={(e) => setTone(e.target.value)}
-              className="w-full border border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#4B8F6C]"
-            >
-              <option value="professional">Professional</option>
-              <option value="friendly">Friendly</option>
-              <option value="creative">Creative</option>
-              <option value="confident">Confident</option>
-            </select>
-          </div>
-
-          <div className="flex gap-3 justify-center">
-            <button
-              onClick={() => handleGenerate("resume")}
-              className="bg-[#4B8F6C] text-white px-6 py-3 rounded-xl shadow hover:shadow-lg transition"
-            >
-              Generate Resume
-            </button>
-            <button
-              onClick={() => handleGenerate("cover")}
-              className="bg-[#D1BFA3] text-[#2E2E2E] px-6 py-3 rounded-xl shadow hover:shadow-lg transition"
-            >
-              Generate Cover Letter
-            </button>
-          </div>
+        </div>
+        <div className="tone-container">
+          <label>Tone:</label>
+          <select value={tone} onChange={(e) => setTone(e.target.value)}>
+            <option value="professional">Professional</option>
+            <option value="friendly">Friendly</option>
+            <option value="creative">Creative</option>
+            <option value="confident">Confident</option>
+          </select>
         </div>
 
-        {output && (
-          <div className="bg-[#FDFCF9] border border-[#E5E3DE] rounded-2xl shadow-inner p-6 text-lg italic">
-            {output}
-          </div>
-        )}
+        <div>
+          <button className="resume-btn" onClick={() => generateText("resume")}>
+            Generate Resume
+          </button>
+          <button className="cover-btn" onClick={() => generateText("cover")}>
+            Generate Cover Letter
+          </button>
+        </div>
+      </div>
 
-        <footer className="mt-12 text-sm text-gray-500">
-          CVConfetti © {new Date().getFullYear()} — Because first impressions
-          should sparkle, not stress you out ✨
-        </footer>
-      </section>
+      {output && <div className="output">{output}</div>}
+
+      <footer>CVConfetti © 2025 — Because first impressions should sparkle, not stress you out ✨</footer>
     </main>
   );
 }
