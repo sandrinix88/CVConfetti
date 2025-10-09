@@ -1,26 +1,50 @@
-import OpenAI from "openai";
-
-const client = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
-
 export default async function handler(req, res) {
+  // Method check
+  if (req.method !== "POST") {
+    return res
+      .status(405)
+      .json({ result: "Method Not Allowed", meta: { ok: false, code: "METHOD_NOT_ALLOWED" } });
+  }
+
   try {
-    const { input, tone, type } = req.body;
+    const { input, tone, type } = req.body || {};
 
-    const prompt = `Write a ${tone} ${
-      type === "resume" ? "resume blurb" : "cover letter"
-    } for someone with this job or skill: "${input}".`;
+    // Basic validation
+    if (!input || typeof input !== "string" || input.trim().length === 0) {
+      return res.status(400).json({
+        result: "Please provide some input text.",
+        meta: { ok: false, code: "BAD_INPUT", field: "input" },
+      });
+    }
 
-    const completion = await client.chat.completions.create({
-      model: "gpt-4o-mini",
-      messages: [{ role: "user", content: prompt }],
+    const allowedTones = ["professional", "friendly", "creative", "confident"];
+    if (tone && !allowedTones.includes(tone)) {
+      return res.status(400).json({
+        result: `Tone must be one of: ${allowedTones.join(", ")}.`,
+        meta: { ok: false, code: "BAD_TONE", field: "tone" },
+      });
+    }
+
+    const allowedTypes = ["resume", "cover"];
+    const safeType = allowedTypes.includes(type) ? type : "resume";
+    const safeTone = tone && allowedTones.includes(tone) ? tone : "professional";
+
+    // Deterministic mock output per project memory: always return hardcoded response
+    // This keeps the API fast and avoids external dependencies.
+    const mockResult =
+      safeType === "resume"
+        ? `A ${safeTone} resume blurb for "${input}": Results-driven professional with a track record of delivering measurable impact. Communicates clearly, collaborates effectively, and adapts quickly to new challenges.`
+        : `A ${safeTone} cover letter for "${input}": I'm excited to apply my skills to drive outcomes, partner cross-functionally, and solve problems with clarity and empathy.`;
+
+    return res.status(200).json({
+      result: mockResult,
+      meta: { ok: true, code: "OK", tone: safeTone, type: safeType },
     });
-
-    const result = completion.choices[0].message.content;
-    res.status(200).json({ result });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ result: "💥 Error generating text." });
+    console.error("/api/generate error:", error);
+    return res.status(500).json({
+      result: "💥 Error generating text.",
+      meta: { ok: false, code: "INTERNAL_ERROR" },
+    });
   }
 }
