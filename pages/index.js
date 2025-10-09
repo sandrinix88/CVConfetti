@@ -39,6 +39,25 @@ export default function Home() {
     }
   };
 
+  const handleCopy = () => {
+    if (output) {
+      navigator.clipboard.writeText(output);
+      alert("Copied to clipboard!");
+    }
+  };
+
+  const handleDownload = () => {
+    if (output) {
+      const blob = new Blob([output], { type: "text/plain" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "CVConfetti.txt";
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+  };
+
   return (
     <main>
       <style>{`
@@ -58,7 +77,10 @@ export default function Home() {
       `}</style>
 
       <h1>Say it better. Get hired faster.</h1>
-      <p>We write the <span className="typed">{typedText}</span><span>|</span></p>
+      <p>
+        We write the <span className="typed">{typedText}</span>
+        <span>|</span>
+      </p>
 
       <div className="floating-box">
         <div className="input-container">
@@ -69,6 +91,7 @@ export default function Home() {
             onChange={(e) => setInput(e.target.value)}
           />
         </div>
+
         <div className="tone-container">
           <label>Tone:</label>
           <select value={tone} onChange={(e) => setTone(e.target.value)}>
@@ -89,9 +112,29 @@ export default function Home() {
         </div>
       </div>
 
-      {output && <div className="output">{output}</div>}
+      {output && (
+        <>
+          <div className="output">{output}</div>
+          <div className="flex justify-end gap-2 mt-2">
+            <button
+              onClick={handleCopy}
+              className="text-sm text-gray-600 hover:text-gray-800 underline"
+            >
+              Copy
+            </button>
+            <button
+              onClick={handleDownload}
+              className="text-sm text-gray-600 hover:text-gray-800 underline"
+            >
+              Download
+            </button>
+          </div>
+        </>
+      )}
 
-      <footer>CVConfetti © 2025 — Because first impressions should sparkle, not stress you out ✨</footer>
+      <footer>
+        CVConfetti © 2025 — Because first impressions should sparkle, not stress you out ✨
+      </footer>
     </main>
   );
 }
