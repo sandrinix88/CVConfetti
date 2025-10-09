@@ -118,13 +118,13 @@ export default function Home() {
           <div className="flex justify-end gap-2 mt-2">
             <button
               onClick={handleCopy}
-              className="text-sm text-gray-600 hover:text-gray-800 underline"
+              className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
             >
               Copy
             </button>
             <button
               onClick={handleDownload}
-              className="text-sm text-gray-600 hover:text-gray-800 underline"
+              className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
             >
               Download
             </button>
