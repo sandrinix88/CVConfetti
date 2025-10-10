@@ -17,6 +17,14 @@ export default async function handler(req, res) {
       });
     }
 
+    // Length validation
+    if (input.length > 200) {
+      return res.status(400).json({
+        result: "Input too long — please keep it under 200 characters.",
+        meta: { ok: false, code: "INPUT_TOO_LONG", field: "input", max: 200 },
+      });
+    }
+
     const allowedTones = ["professional", "friendly", "creative", "confident"];
     if (tone && !allowedTones.includes(tone)) {
       return res.status(400).json({
