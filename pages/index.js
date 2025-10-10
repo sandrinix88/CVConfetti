@@ -70,43 +70,46 @@ export default function Home() {
           <span className="ml-1">|</span>
         </p>
 
-        <div className="bg-white p-8 rounded-2xl shadow-[0_8px_20px_rgba(0,0,0,0.1)]">
-          <div className="mb-4 w-full text-left">
-            <label htmlFor="position" className="block mb-2 text-sm font-medium">Target Position</label>
-            <input
-              id="position"
-              type="text"
-              placeholder="e.g., Product Manager"
-              value={position}
-              onChange={(e) => setPosition(e.target.value)}
-              className="w-full p-3 rounded-[1rem] border border-gray-300 text-base"
-            />
-          </div>
+        <div className="bg-white p-8 rounded-2xl shadow-[0_8px_20px_rgba(0,0,0,0.1)] space-y-6">
+          <div className="space-y-4">
+            <div className="w-full text-left">
+              <label htmlFor="position" className="block mb-1 font-medium text-sm">Target Position</label>
+              <input
+                id="position"
+                type="text"
+                placeholder="e.g., Product Manager"
+                value={position}
+                onChange={(e) => setPosition(e.target.value)}
+                className="w-full p-3 rounded-[1rem] border border-gray-300 text-base"
+              />
+            </div>
 
-          <div className="mb-4 w-full text-left">
-            <label htmlFor="skills" className="block mb-2 text-sm font-medium">Key Skills</label>
-            <input
-              id="skills"
-              type="text"
-              placeholder="e.g., React, UX writing, leadership"
-              value={skills}
-              onChange={(e) => setSkills(e.target.value)}
-              className="w-full p-3 rounded-[1rem] border border-gray-300 text-base"
-            />
-          </div>
+            <div className="w-full text-left">
+              <label htmlFor="skills" className="block mb-1 font-medium text-sm">Key Skills</label>
+              <input
+                id="skills"
+                type="text"
+                placeholder="e.g., React, UX writing, leadership"
+                value={skills}
+                onChange={(e) => setSkills(e.target.value)}
+                className="w-full p-3 rounded-[1rem] border border-gray-300 text-base"
+              />
+            </div>
 
-          <div className="mb-4 w-full">
-            <label className="mr-2">Tone:</label>
-            <select
-              value={tone}
-              onChange={(e) => setTone(e.target.value)}
-              className="w-full p-3 rounded-[1rem] border border-gray-300 text-base"
-            >
-              <option value="professional">Professional</option>
-              <option value="friendly">Friendly</option>
-              <option value="creative">Creative</option>
-              <option value="confident">Confident</option>
-            </select>
+            <div className="w-full text-left">
+              <label htmlFor="tone" className="block mb-1 font-medium text-sm">Tone</label>
+              <select
+                id="tone"
+                value={tone}
+                onChange={(e) => setTone(e.target.value)}
+                className="w-full p-3 rounded-[1rem] border border-gray-300 text-base"
+              >
+                <option value="professional">Professional</option>
+                <option value="friendly">Friendly</option>
+                <option value="creative">Creative</option>
+                <option value="confident">Confident</option>
+              </select>
+            </div>
           </div>
 
           <div>
