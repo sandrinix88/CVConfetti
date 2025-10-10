@@ -7,10 +7,14 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { input, tone, type } = req.body || {};
+    const { input, position, skills, tone, type } = req.body || {};
+    const composedInput =
+      typeof input === "string" && input.trim().length > 0
+        ? input
+        : [position, skills].filter(Boolean).join(" | ").trim();
 
     // Basic validation
-    if (!input || typeof input !== "string" || input.trim().length === 0) {
+    if (!composedInput || typeof composedInput !== "string" || composedInput.trim().length === 0) {
       return res.status(400).json({
         result: "Please provide some input text.",
         meta: { ok: false, code: "BAD_INPUT", field: "input" },
@@ -18,7 +22,7 @@ export default async function handler(req, res) {
     }
 
     // Length validation
-    if (input.length > 200) {
+    if (composedInput.length > 200) {
       return res.status(400).json({
         result: "Input too long — please keep it under 200 characters.",
         meta: { ok: false, code: "INPUT_TOO_LONG", field: "input", max: 200 },
@@ -41,8 +45,8 @@ export default async function handler(req, res) {
     // This keeps the API fast and avoids external dependencies.
     const mockResult =
       safeType === "resume"
-        ? `A ${safeTone} resume blurb for "${input}": Results-driven professional with a track record of delivering measurable impact. Communicates clearly, collaborates effectively, and adapts quickly to new challenges.`
-        : `A ${safeTone} cover letter for "${input}": I'm excited to apply my skills to drive outcomes, partner cross-functionally, and solve problems with clarity and empathy.`;
+        ? `A ${safeTone} resume blurb for "${composedInput}": Results-driven professional with a track record of delivering measurable impact. Communicates clearly, collaborates effectively, and adapts quickly to new challenges.`
+        : `A ${safeTone} cover letter for "${composedInput}": I'm excited to apply my skills to drive outcomes, partner cross-functionally, and solve problems with clarity and empathy.`;
 
     return res.status(200).json({
       result: mockResult,
