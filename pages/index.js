@@ -59,82 +59,79 @@ export default function Home() {
   };
 
   return (
-    <main>
-      <style>{`
-        body { font-family: 'Inter', sans-serif; margin: 0; padding: 0; background: #F7F4EF; color: #2E2E2E; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
-        main { max-width: 600px; width: 100%; padding: 2rem; text-align: center; }
-        h1 { font-family: 'Playfair Display', serif; font-size: 2.5rem; margin-bottom: 1rem; }
-        p { font-size: 1.2rem; margin-bottom: 2rem; }
-        .floating-box { background: white; padding: 2rem; border-radius: 1.5rem; box-shadow: 0 8px 20px rgba(0,0,0,0.1); }
-        .input-container, .tone-container { margin-bottom: 1rem; width: 100%; }
-        input, select { width: 100%; padding: 0.75rem; border-radius: 1rem; border: 1px solid #ccc; font-size: 1rem; }
-        button { padding: 0.75rem 1.5rem; border: none; border-radius: 1rem; font-size: 1rem; cursor: pointer; margin: 0.5rem; }
-        .resume-btn { background: #4B8F6C; color: white; }
-        .cover-btn { background: #D1BFA3; color: #2E2E2E; }
-        .output { background: #FDFCF9; border: 1px solid #E5E3DE; padding: 1rem; border-radius: 1rem; margin-top: 1rem; font-style: italic; }
-        .typed { color: #4B8F6C; font-weight: 600; }
-        footer { margin-top: 2rem; font-size: 0.9rem; color: #666; }
-      `}</style>
+    <main className="min-h-screen flex items-center justify-center bg-[#F7F4EF] text-[#2E2E2E] font-sans">
+      <div className="max-w-[600px] w-full p-8 text-center">
+        <h1 className="font-serif text-4xl mb-4">Say it better. Get hired faster.</h1>
+        <p className="text-lg mb-8">
+          We write the <span className="text-[#4B8F6C] font-semibold">{typedText}</span>
+          <span className="ml-1">|</span>
+        </p>
 
-      <h1>Say it better. Get hired faster.</h1>
-      <p>
-        We write the <span className="typed">{typedText}</span>
-        <span>|</span>
-      </p>
+        <div className="bg-white p-8 rounded-2xl shadow-[0_8px_20px_rgba(0,0,0,0.1)]">
+          <div className="mb-4 w-full">
+            <input
+              type="text"
+              placeholder="Type your job title or skills..."
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              className="w-full p-3 rounded-[1rem] border border-gray-300 text-base"
+            />
+          </div>
 
-      <div className="floating-box">
-        <div className="input-container">
-          <input
-            type="text"
-            placeholder="Type your job title or skills..."
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-          />
-        </div>
-
-        <div className="tone-container">
-          <label>Tone:</label>
-          <select value={tone} onChange={(e) => setTone(e.target.value)}>
-            <option value="professional">Professional</option>
-            <option value="friendly">Friendly</option>
-            <option value="creative">Creative</option>
-            <option value="confident">Confident</option>
-          </select>
-        </div>
-
-        <div>
-          <button className="resume-btn" onClick={() => generateText("resume")}>
-            Generate Resume
-          </button>
-          <button className="cover-btn" onClick={() => generateText("cover")}>
-            Generate Cover Letter
-          </button>
-        </div>
-      </div>
-
-      {output && (
-        <>
-          <div className="output">{output}</div>
-          <div className="flex justify-end gap-2 mt-2">
-            <button
-              onClick={handleCopy}
-              className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
+          <div className="mb-4 w-full">
+            <label className="mr-2">Tone:</label>
+            <select
+              value={tone}
+              onChange={(e) => setTone(e.target.value)}
+              className="w-full p-3 rounded-[1rem] border border-gray-300 text-base"
             >
-              Copy
+              <option value="professional">Professional</option>
+              <option value="friendly">Friendly</option>
+              <option value="creative">Creative</option>
+              <option value="confident">Confident</option>
+            </select>
+          </div>
+
+          <div>
+            <button
+              className="bg-[#4B8F6C] text-white px-4 py-3 rounded-[1rem] text-base cursor-pointer m-2 hover:opacity-90"
+              onClick={() => generateText("resume")}
+            >
+              Generate Resume
             </button>
             <button
-              onClick={handleDownload}
-              className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
+              className="bg-[#D1BFA3] text-[#2E2E2E] px-4 py-3 rounded-[1rem] text-base cursor-pointer m-2 hover:opacity-90"
+              onClick={() => generateText("cover")}
             >
-              Download
+              Generate Cover Letter
             </button>
           </div>
-        </>
-      )}
+        </div>
 
-      <footer>
-        CVConfetti © 2025 — Because first impressions should sparkle, not stress you out ✨
-      </footer>
+        {output && (
+          <>
+            <div className="bg-[#FDFCF9] border border-[#E5E3DE] p-4 rounded-[1rem] mt-4 italic">{output}</div>
+            <div className="flex justify-end gap-2 mt-2">
+              <button
+                onClick={handleCopy}
+                className="bg-[#4B8F6C] text-white px-4 py-3 rounded-[1rem] text-base cursor-pointer hover:opacity-90"
+              >
+                Copy
+              </button>
+              <button
+                onClick={handleDownload}
+                className="bg-[#4B8F6C] text-white px-4 py-3 rounded-[1rem] text-base cursor-pointer hover:opacity-90"
+              >
+                Download
+              </button>
+            </div>
+          </>
+        )}
+
+        <footer className="mt-8 text-sm text-gray-600">
+          CVConfetti © 2025 — Because first impressions should sparkle, not stress you out ✨
+        </footer>
+      </div>
     </main>
   );
 }
